@@ -21,12 +21,16 @@ errorFunction = SquaredError()
 class InputNode():
     def __init__(self):
         self.input = 0
+        self.outputEdge = []
 
     def setInput(self, input):
         self.input = input
 
     def getOutput(self):
         return self.input
+
+    def addOutputEdge(self, edge):
+        self.outputEdges.append(edge)
 
 
 class Edge():
@@ -55,10 +59,11 @@ class Edge():
 
 class OutputNode():
     #inputEdges should be the array of edges that lead into this node
-    def __init__(self, inputEdges):
+    def __init__(self):
         self.output = 0
         self.net = 0
         self.delta = 0
+        self.inputEdges = []
 
     def addToOutput(self):
         inputsum = 0
@@ -74,11 +79,14 @@ class OutputNode():
     def getDelta(self):
         return self.delta
 
+    def addInputEdge(self, edge):
+        self.inputEdges.append(edge)
+
 class HiddenNode():
     # inputEdges should be the array of edges that lead into this node. Output edges are downstream
-    def __init__(self, inputEdges, outputEdges):
-        self.inputEdges = inputEdges
-        self.outputEdges = outputEdges
+    def __init__(self):
+        self.inputEdges = []
+        self.outputEdges = []
         self.output = 0
         self.net = 0
         self.delta = 0
@@ -97,11 +105,20 @@ class HiddenNode():
             self.delta += edge.getWeight() * edge.getDownstreamNode().getDelta()
         self.delta *= outputFunction.derivative(self.net)
 
-def createLayer(inputNodes, outputNodes):
+    def addInputEdge(self, edge):
+        self.inputEdge.append(edge)
+
+    def addOutputEdge(self, edge):
+        self.outputEdges.append(edge)
+
+def createLayer(upstreamNodes, downstreamNodes):
     edges = []
-    for input in inputNodes:
-        for output in outputNodes:
-            edges.append(Edge(0.1, input, output))
+    for inputNode in upstreamNodes:
+        for outputNode in downstreamNodes:
+            edge = Edge(0.1, inputNode, outputNode)
+            edges.append(edge)
+            inputNode.addOutputEdge(edge)
+            outputNode.addInputEdge(edge)
     return edges
 
 class NeuralNetwork():
