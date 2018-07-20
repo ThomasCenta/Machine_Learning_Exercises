@@ -12,7 +12,7 @@ errorFunction = SquaredError()
 outputFunction = Sigmoid()
 weightGenerator = uniformWeightGenerator(0.1, 0.2)
 learningRate = 1
-momentum = 0
+momentum = 0.1
 
 def desiredFunction(x):
     return x
@@ -25,7 +25,7 @@ network = FullyConnectedFeedForwardNeuralNetwork(numInputs, numHiddenLayers, num
 totalTestError = 0
 numTests = 400
 for x in range(numTests):
-    input = random.uniform(0.4, 0.6)
+    input = random.uniform(0.1, 0.9)
     expected = [desiredFunction(input)]
     totalTestError += network.trainWeightDeltas([input], expected)
 print('initial: '+str(totalTestError/numTests))

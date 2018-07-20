@@ -6,16 +6,19 @@ class Edge:
         self.inputNode = inputNode
         self.outputNode = outputNode
         self.deltas = []
+        self.previousChange = 0
 
     def getOutput(self):
         return self.weight * self.inputNode.getOutput()
 
     def calculateDelta(self, learningRate):
-        delta = learningRate*self.outputNode.getDelta()*self.weight
+        delta = learningRate*self.outputNode.getDelta()*self.inputNode.getOutput()
         self.deltas.append(delta)
 
-    def implementDeltas(self):
-        self.weight = self.weight + numpy.mean(self.deltas)
+    def implementDeltas(self, momentum):
+        currentChange = numpy.mean(self.deltas) + momentum*self.previousChange
+        self.weight += currentChange
+        self.previousChange = currentChange
         self.deltas = []
 
     def getDownstreamNode(self):

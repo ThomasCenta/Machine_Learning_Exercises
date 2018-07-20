@@ -83,7 +83,7 @@ class FullyConnectedFeedForwardNeuralNetwork():
     def updateWeights(self):
         for edgeLayer in self.edges:
             for edge in edgeLayer:
-                edge.implementDeltas()
+                edge.implementDeltas(self.momentum)
 
     def getEdgeWeightMatrix(self):
         toReturn = []
@@ -93,3 +93,9 @@ class FullyConnectedFeedForwardNeuralNetwork():
             for edge in edgeLayer:
                 nextRow.append(round(edge.getWeight(), 4))
         return toReturn
+
+    def setLearningRate(self, newValue):
+        self.learningRate = newValue
+
+    def setMomentum(self, newValue):
+        self.learningRate = newValue
