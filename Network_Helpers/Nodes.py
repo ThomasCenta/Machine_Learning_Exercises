@@ -11,7 +11,7 @@ class Edge:
         return self.weight * self.inputNode.getOutput()
 
     def calculateDelta(self, learningRate):
-        delta = learningRate*self.outputNode.getDelta()*self.weight
+        delta = learningRate*self.outputNode.getDelta()*self.inputNode.getOutput()
         self.deltas.append(delta)
 
     def implementDeltas(self):

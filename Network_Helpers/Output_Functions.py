@@ -7,3 +7,10 @@ class Sigmoid():
 
     def derivative(self, input):
         return self.output(input) * (1.0 - self.output(input))
+
+class Linear():
+    def output(self, input):
+        return input
+
+    def derivative(self, intput):
+        return 1
