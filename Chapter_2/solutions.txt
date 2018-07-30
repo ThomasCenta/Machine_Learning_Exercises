@@ -1,0 +1,132 @@
+2.1 - Every hypothesis with a null in it is equivalent as the empty set. Then each attribute in the hypothesis can have its specific value or ?
+	so 1 + 4*3*3*3*3*3 = 973. Watercurrent adds a *5. generic adds a *(k+1)
+
+2.2 - 
+	initial: S = <0,0,0,0,0,0>, G = <?,?,?,?,?,?>
+	<sunny, warm, high, strong, cool, change> +: 	S = {<sunny, warm, high, strong, cool, change>} 
+							G = {<?,?,?,?,?,?>}
+	<rainy, cold, high, strong, warm, change> -: 	S = {<sunny, warm, high, strong, cool, change>}
+							G = {<sunny,?,?,?,?,?>, <?,warm,?,?,?,?>, <?,?,?,?,cool,?>}
+	<sunny, warm, high, strong, warm, same> +: 	S = {<sunny, warm, high, strong, ?, ?>}
+							G = {<sunny,?,?,?,?,?>, <?,warm,?,?,?,?>}
+	<sunny, warm, normal, strong, warm, same> +: 	S = {<sunny, warm, ?, strong, ?, ?>}
+							G = {<sunny,?,?,?,?,?>, <?,warm,?,?,?,?>}
+	b) put the negative one last. Results in S only having one h the entire time and G having one until at the end having 2.
+
+2.3 - 	<sunny, warm, normal, strong, warm, same> +: 	S = {<sunny, warm, normal, strong, warm, same>}
+							G = {<?,?,?,?,?,?>}
+	<sunny, warm, high, strong, warm, same> +: 	S = {<sunny, warm, ?, strong, warm, same>}
+							G = {<?,?,?,?,?,?>}
+	<rainy, cold, high, strong, warm, change> -: 	S = {<sunny, warm, ?, strong, warm, same>}
+							G = {(<sunny,?,?,?,?,?> or <?,warm,?,?,?,?>), (<sunny,?,?,?,?,?> or <?,?,?,?,?,same>),
+							     (<?,warm,?,?,?,?> or <?,?,?,?,?,same>)}
+	<sunny, warm, high, strong, cool, change> +: 	S = {<sunny, warm, ?, strong, ?, ?>}
+							G = {(<sunny,?,?,?,?,?> or <?,warm,?,?,?,?>), (<sunny,?,?,?,?,?> or <?,?,?,?,?,same>),
+							     (<?,warm,?,?,?,?> or <?,?,?,?,?,same>)}
+
+2.4 - 	a) <a=4, b=6, c=3, d=5>
+	b) {<2,8,2,5>, <3,8,2,7>}
+	c) will: (7,5), won't: (5,4)
+	d) 5 for a 1x1 target concept, else 6, looks like:   -
+			  - +
+			      + -
+			      -
+
+2.5 - a) <male brown tall US><female black short US> +: 	S = {<male brown tall US><female black short US>}
+								G = {<? ? ? ?><? ? ? ?>}
+	<male brown short french><female black short US +: 	S = {<male brown ? ?><female black short US>}
+								G = {<? ? ? ?><? ? ? ?>}
+	<female brown tall German><female black short Indian -: S = {<male brown ? ?><female black short US>}
+								G = {<male ? ? ?><? ? ? ?>, <? ? ? ?><? ? ? US>}
+	<male brown tall irish><female brown short Irish +: 	S = {<male brown ? ?><female ? short ?>}
+								G = {<male ? ? ?><? ? ? ?>}
+	b) each hypothesis has two options for each attribute: ?, or the specific attribute => 2^8 = 256
+	c) we have one positive example so the only option for the target concept is to have either those attributes or ?. So submit 8 new queries
+		with the ith query having the ith attribute a different value than it is now (doesn't matter what)
+	d) The size of the unbiased hypothesis space is the size of the power set of X. so 2^|X| = 2^(2*(2*3*3*7)) = 2^252. c would change to need
+		all input possibilities (252)
+
+2.6 - show h e VSHD => (exists s e S)(exists g e G) (g >=g h >=g s). h e VSHD => h consistent(D). Now assume there is an h in VSHD s.t.
+	for all s e S, for all g e G, h >g g or s >g h. Assume s >g h => by the definition of S, there is no s' e H s.t. s >g s' && consistent(s', D)
+		so s >g h => h not consistent. Now assume h >g g. By definition of G, there is no g' e H s.t. g' >g g && consistent(g', D)
+		so h >g g => not consisten(g', D). To be more formal, rewrite the definitions of G/S to say 
+		for all s'/g' (!consistent(s'/g', D) OR g >g g') (you get the idea)
+
+2.7 - the strictly less than specification makes it impossible to have a maximally specific hypothesis because there exists no "closest number" on the
+	number line. Change it so that it is less than or equal to.
+
+2.8 - the power set of X\x is equivalent to all hypothesis without x. the size of the power set of X\x is 2^(|X|-1) = (2^|X|)/2 which is half of the
+	power set of X
+
+2.9 - Any attribute appearing in the target concept as ai = T/F means all negative examples are the opposite. It also means all positive examples have
+	at least one attribute in common. Notice that there is no "most general" hypothesis that can include all possible inputs... makes candidate
+	elimination impossible.
+	first I would make a table:
+	1 | 2 | ... | n
+	----------------
+      T X |   | ... | X
+      F	  | X | ... | X
+
+	Go through all negative examples and put an X for all attributes that show up in them. These cannot appear in the hypothesis. Notice that you 
+	can just use the disjunction of all attributes that don't have an X. If there are any negative inputs at all, then at least one X is filled for
+	each column of the table, meaning there is only one or zero options for each attribute to be put into the target concept. This fills out the 
+	maximum number of positive examples so if there is a consistent hypothesis, this would find it. 
+	
+	Now if there are no negative examples and decisions have to be made for each attribute (which might be what the problem meant, it did not 
+	attach a positive or negative to the input) then the desired hypothesis can be made using the following algorithm:
+		remainingInput <- trainingData
+		for each attribute i
+			inputsWithTrue <- 0
+			for each input in remainingInputs
+				if input(ai) == T
+					inputsWithTrue ++
+			if(inputsWithTrue >= |remainingInput|/2)
+				set target concept attribute i to true
+				remove all elements of remainingInput that have ai=T
+			else
+				set target concept attribute i to false
+				remove all elements of remainingInput that have ai=F
+	
+	Notice that at each attribute the remainingInput is cut by at least half so remainingInput(i+1) <= remainingInput(i)/2
+	=> remainingInput(n) <= |trainingData|/2^n. Notice that the maximum size of the trainingData is 2^n and a consistent hypothesis can
+	only be found if there are < 2^n inputs. This means at some point in the for loop, or just after it, remainingInput will be empty if there
+	is a consistent hypothesis and if its empty, that means there are no remainingInput needed to be satisfied by the target concept.
+	Fun Problem. Now im convinced my assumption of all inputs are considered positive was indeed intended by the problem.
+
+2.10 - The implementation is found in exercise210.java.txt in this folder
+	For predicting the number of inputs required first calculate odds of getting a positive input = 1/3 * 1/2 = 1/6
+	Given you only receive positive inputs, the first input will have novel attributes which means you need to find out how long it will take to get
+	the subsequent inputs that cover the remaining "?" by giving a different attribute. E is the expected value and this is the probability tree
+	Remember we are assuming positive inputs for this tree!
+    	    
+	      odds of getting an input all four ? attributes different than initial (1/16)
+	    |---------------------------------------------------------------------------------------> 1 (only took one try!)	
+	    |odds of getting an input with exactly one ? attribute different than initial (4/16)
+	    |---------------------------------------------------------------------------------------> 1 + expected value for filling three ?
+	    |odds of getting an input with exactly two ? attribute different than initial (6/16)
+	E --|---------------------------------------------------------------------------------------> 1 + expected value for filling two ?
+	    |odds of getting an input with exactly three ? attribute different than initial (4/16)
+	    |---------------------------------------------------------------------------------------> 1 + expected value for filling one ?
+	    |odds of getting an input with exactly two ? attribute different than initial (1/16)
+	    |---------------------------------------------------------------------------------------> 1 + E
+
+	then you write out the equation: E = (1/16)*1 + (4/16)*(1+E[3]) + (6/16)*(1+E[2]) + (4/16)*(1+E[1]) + (1 + E)
+	I wrote the expected vaue for filling x ? as E[x] to shorten it. To find E[x] you have to write out trees like this one for each and solve them.
+	Note that E[3] depends on E[2] and E[1], E[2] depends on E[1], and E[1] depends on nothing so do that one first.
+	It turns out E (E[4]) = 3.5
+	
+	Now since for this expected value we were finding depended on positive inputs, we now need to find the expected number of inputs to get 3.5 inputs
+	The odds of getting a positive input is 1/6 so write out a tree to find the expected value for getting one positive input and you get that it 
+	takes 6. Now we need 3.5 total but due to the occurence of the 1st, 2nd, 3rd, 3rd.5 happening sequentially and each being independent of the
+	previous, you simply get to add! so do 6*3.5 = 21 inputs to get positive inputs different than the initial, non-null hypothesis. But to get that
+	non-null hypothesis (it is null before any training) you need to get it a positive example, which takes 6 tries. so its 21 + 6 = 27, which
+	matches the simulations.
+	
+	If there are more "?" I would expect it to take less time because that 3.5 wont grow very fast with additional inputs. Notice
+	E[1] = 2, E[2] = 2.66, E[3] = 3.14, E[4] = 3.5 is growing fairly slowly while each ? you add divides the odds of getting a positive input
+	by 2 or 3. Im not going to write out a general equation, idea is more general target concept => faster training. 
+	The number of attributes would increase the time, obviously.
+
+	DONE WITH CHAPTER 2! TIME FOR BED/NETFLIX!
+	
+	
