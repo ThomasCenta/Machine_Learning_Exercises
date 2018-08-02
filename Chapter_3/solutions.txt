@@ -1,0 +1,81 @@
+3.1) a)	A                    b) A                      c)  A
+     T	|  F                T   |                        T | F
+    ----------            -----------                  ---------
+    |         |           |          |                 |        |
+    B       False       True         B               T B F    T B  F
+  T | F                            T | F             -----    -----
+---------                        --------           |     |   |    |
+|        |                      |        |         F      T   T    F
+False    True                   C       False
+                             T  |  F
+			   ----------
+			   |         |
+                          True      False
+
+d)          A
+            |
+        ------------------    
+        |                | 
+        B                C
+     ------            ------  
+     |    |            |    |
+     T    C            D    F
+          |            |  
+       -------       -----
+       |     |       |   |
+       D     F       T   F
+       |
+     -----
+     |   |
+     T   F
+
+2) a) -.5*log2(.5)-.5*log2(.5) = -1
+   b) -1 - (2/3*(-1)-1/3*(-1)) = 0
+
+3) It sounds like elaboration in this case means pruning the tree. If this is the case then this is not a more general than relation
+	D1:  A                 D2:   A
+	     |                       |
+          -------                  -----
+          |     |                  |   |
+          B     F                  T   F
+          |
+         ...
+
+    Assume there are like 999 True leaf nodes under B, and only one False leaf node under B, or something
+
+4) a)       sky
+       sunny |  Rainy
+      -----------------
+      |               |
+     Yes              no
+
+b) The decision tree is one of the hypothesis in the version space. It is actually in G.
+c) splits: sky -> {{3,1}, {0, 1}}, airtemp -> {{3,1}, {0, 1}}, humidity -> {{2,1}, {1, 1}}, wind -> {{3,1}, {0, 1}}, water -> {{3,1}, {1, 0}}, forecast -> {{2,1}, {1, 1}}
+information gains: sky = airtemp = water = wind = .97-.66 = .31, forecast = humidity = .97-.95 = .02
+
+	    sky
+       sunny |  Rainy
+      -----------------
+      |               |
+      ?               no
+
+splits: airtemp -> {{3,1}, {0, 0}}, humidity -> {{2,0}, {1, 1}}, wind -> {{3,0}, {0, 1}}, water -> {{2,1}, {1, 0}}, forecast -> {{2,1}, {1, 0}}
+information gains: airtemp = 0, humidity = .66-.75 = -.09, wind = .66 - 0 = .66, water = forecast = .66-.69 = -.3
+
+	    sky
+       sunny |  Rainy
+      -----------------
+      |               |
+     wind             no
+strong| weak
+  ---------
+  |       |
+ yes      no
+
+d) first: S = the tree with one leaf node as yes and the rest as no (im not drawing it)
+	  G = root node = yes
+   second:S = the tree with two leaf nodes as yes and the rest as no
+          G = root node = yes
+
+	The difficulty is that the specific set will always be one tree. So will G actually since it will have one 'no' leaf node for each node in the training examples.
+ 

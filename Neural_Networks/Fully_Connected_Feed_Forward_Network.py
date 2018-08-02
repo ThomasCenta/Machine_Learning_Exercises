@@ -70,8 +70,18 @@ class FullyConnectedFeedForwardNeuralNetwork():
                 self._appendHiddenNodeLayer(numHiddenNodes, self.hiddenLayers[x-1])
             self.edges.append(createLayer(self.hiddenLayers[numHiddenLayers-1], self.outputNodes, weightGenerator))
 
-    def getOuput(self, inputs):
+    def getOutput(self, inputs):
         self._feedForward(inputs)
+        outputs = []
+        for node in self.outputNodes:
+            outputs.append(node.getOutput())
+        return outputs
+
+    def getError(self, inputs, expectedOutputs):
+        self._feedForward(inputs)
+        for x in range(len(self.outputNodes)):
+            self.outputNodes[x].calculateDelta(expectedOutputs[x])
+        return self._totalError()
 
     # returns error, appends deltas to all weights based on expectedOutputs
     def trainWeightDeltas(self, inputs, expectedOutputs):
@@ -98,4 +108,8 @@ class FullyConnectedFeedForwardNeuralNetwork():
         self.learningRate = newValue
 
     def setMomentum(self, newValue):
+<<<<<<< HEAD
         self.learningRate = newValue
+=======
+        self.momentum = newValue
+>>>>>>> 44f7c552811f7dabeae5b2563b73480190aaff32

@@ -1,0 +1,13 @@
+4.1) It needs to represent the function y = 2x+2 => y-2x-2 > 0
+	w0 (the constant) = -2; w1 (x1 weight) = -2; w2 (y weight) = 1
+
+4.2) a) can be represented by the function y = x-1 where A=x and B=y => y-x-1 > 0
+	so w0=-1; w1 = -1; w2 = 1
+     b) create four hidden units which each take the two inputs and design each one to be one of the four and statements: A^B, A^!B, !A^B, !A^!B
+		then have each one output to o with weight one. 
+4.3) True, everything classified as positive by the first will be classified as positive by the second due to the lower threshold.
+
+4.4) This question is dumb since a single linear unit has serious trouble representing a single threshold perceptron. Im not going to bother
+	making a dozen plots to show that. I will note however that the iterative trained faster but the batch had a lower error when after it troughed
+	
+4.5)
