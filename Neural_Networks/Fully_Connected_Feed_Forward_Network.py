@@ -34,15 +34,16 @@ class FullyConnectedFeedForwardNeuralNetwork():
         return total
 
     # adds layer of nodes to self.hiddenLayers and the edges of it into
-    def _appendHiddenNodeLayer(self, numHiddenNodes, upstreamLayer):
+    def _appendHiddenNodeLayer(self, numHiddenNodes, upstreamLayer, useContextNodes):
         newLayer = []
         for x in range(numHiddenNodes):
             newLayer.append(HiddenNode(self.outputFunction))
-        self.edges.append(createLayer(upstreamLayer, newLayer, self.weightGenerator))
+        self.edges.append(createLayer(upstreamLayer, newLayer, self.weightGenerator, useContextNodes))
         self.hiddenLayers.append(newLayer)
 
+
     def __init__(self, numInputs, numHiddenLayers, numHiddenNodes, numOutputs, errorFunction, outputFunction,
-                 weightGenerator, learningRate, momentum):
+                 weightGenerator, learningRate, momentum, useContextNodes):
         if numHiddenLayers == 0 != numHiddenNodes == 0:
             raise ValueError('invalid values: num hidden layers: ' + str(numHiddenLayers)
                              + ', num hidden nodes: ' + str(numHiddenNodes))
@@ -63,12 +64,12 @@ class FullyConnectedFeedForwardNeuralNetwork():
 
         self.hiddenLayers = []
         if numHiddenLayers == 0:
-            self.edges.append(createLayer(self.inputNodes, self.outputNodes, weightGenerator))
+            self.edges.append(createLayer(self.inputNodes, self.outputNodes, weightGenerator, useContextNodes))
         else:
-            self._appendHiddenNodeLayer(numHiddenNodes, self.inputNodes)
+            self._appendHiddenNodeLayer(numHiddenNodes, self.inputNodes, useContextNodes)
             for x in range(1, numHiddenLayers):
-                self._appendHiddenNodeLayer(numHiddenNodes, self.hiddenLayers[x-1])
-            self.edges.append(createLayer(self.hiddenLayers[numHiddenLayers-1], self.outputNodes, weightGenerator))
+                self._appendHiddenNodeLayer(numHiddenNodes, self.hiddenLayers[x-1], useContextNodes)
+            self.edges.append(createLayer(self.hiddenLayers[numHiddenLayers-1], self.outputNodes, weightGenerator, useContextNodes))
 
     def getOutput(self, inputs):
         self._feedForward(inputs)

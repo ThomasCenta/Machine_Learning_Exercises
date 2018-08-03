@@ -1,5 +1,6 @@
 import numpy
 
+
 class Edge:
     def __init__(self, startingWeight, inputNode, outputNode):
         self.weight = startingWeight

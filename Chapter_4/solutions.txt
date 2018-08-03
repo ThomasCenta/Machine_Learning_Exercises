@@ -10,4 +10,20 @@
 4.4) This question is dumb since a single linear unit has serious trouble representing a single threshold perceptron. Im not going to bother
 	making a dozen plots to show that. I will note however that the iterative trained faster but the batch had a lower error when after it troughed
 	
-4.5)
+4.5) E = (1/2)(t-o)^2 = (1/2)(t-w0- w1(x1+x1^2)+... + wn(xn+xn^2)
+    dE/dwi = -(t-o)*(xi+xi^2)
+    note: you can't make a delta training rule off of this output function
+
+4.6) It updates based on the error of one example. The summation of the changes wont add to the total for all samples because
+    the error changes as the weights are updated.
+
+4.7) Run the 4.7.py file
+
+4.8) output deltas: -dE/dnet = dE/do * do/dnet; dE/do = d/do(1/2(t-o)^2) = -(t-o); do/dnet = 1-tanh(net)^2
+            delta = (1-o^2)*(t-o)
+     hidden deltas: dE/dnet = do/dent * sum(dE/do) = (1-o^2)* sum(wij*deltai)
+
+4.9) No. the weights just multiply the output of the hidden node so you cant have it only peak for one value. There has to be
+        a crossing over point for each weight where any value larger will be large and smaller will be small. If you define
+        a certain output to be 1 for >= Oh from the hidden unit, then all values will be >= 1 for >= that value
+        I made a 4_9.py file to show it doesnt converge
